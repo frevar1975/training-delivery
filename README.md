@@ -1,41 +1,12 @@
-# Training Delivery - Freddy Vargas (MCT)
+# Training Delivery
 
-Repositorio de planificación y ejecución de cursos.
+Repositorio para ejecuciones reales de cursos.
 
-## Cursos
+Estructura:
+training-delivery\<CourseCode>\<Center>-<Month>
 
-### AI-3016
-- TEMPLATE
-- EducationTI - mayo 2026
+Ejemplo:
+training-delivery\AI-3016\EducationTI-septiembre-2026
+training-delivery\PL-7008\EntrenamientoCertero-septiembre-2026
 
-### AI-901
-- TEMPLATE
-
-### AI-900
-- TEMPLATE
-
-### AZ-900
-- TEMPLATE
-
----
-
-## Estructura
-
-Cada curso contiene:
-- TEMPLATE base reutilizable
-- versiones por centro y fecha
-
----
-
-## Metodología
-
-1. Crear TEMPLATE del curso
-2. Generar versión con script
-3. Ajustar contenido por cliente
-4. Registrar mejoras
-
----
-
-## Objetivo
-
-Estandarizar cursos, reutilizar contenido y mejorar cada iteración.
+Las plantillas base viven en training-templates.
