@@ -1,15 +1,15 @@
 $ErrorActionPreference='Stop'
 $envName=azd env get-value AZURE_ENV_NAME
-if ($LASTEXITCODE -ne 0 -or -not $envName) { throw 'Primero ejecuta azd env new escalado-aula.' }
+if ($LASTEXITCODE -ne 0 -or -not $envName) { throw 'Primero crea o selecciona el entorno azd de esta demo.' }
 $existing=azd env get-values --output json | ConvertFrom-Json
 if ($LASTEXITCODE -ne 0) { throw 'No se pudo leer el entorno azd.' }
 if ($existing.SSH_PUBLIC_KEY) { Write-Host 'El entorno ya tiene la clave pública del demo.'; exit 0 }
 # Se genera solo la clave pública requerida por Linux. No se habilita SSH.
 # La administración de esta demo se realiza con Azure Run Command.
-$rsa=[System.Security.Cryptography.RSA]::Create()
+$rsa=New-Object System.Security.Cryptography.RSACryptoServiceProvider -ArgumentList 2048
 $wire=New-Object System.IO.MemoryStream
 try {
-    $rsa.KeySize=2048
+    $rsa.PersistKeyInCsp=$false
     $public=$rsa.ExportParameters($false)
     function Write-Field([byte[]]$data) {
         $length=[uint32]$data.Length
