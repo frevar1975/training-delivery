@@ -1,5 +1,8 @@
 # Sesión 1 — Fundamentos de IA y cargas de trabajo
 
+**Centro:** Netxpress  
+**Curso:** AI-901T00-A — Introducción a la IA en Azure
+
 ## Resultado esperado
 
 Al finalizar, el alumno podrá:
