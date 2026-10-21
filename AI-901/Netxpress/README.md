@@ -11,6 +11,7 @@ Delivery del curso **AI-901T00-A: Introducción a la IA en Azure** para Netxpres
 ## Materiales
 
 - [Sesión 1 — Fundamentos de IA y cargas de trabajo](clase-01-fundamentos.md)
+- [Demo — Agente de Microsoft Foundry](demo-nuevo-agente/ai-900-demo/README.md)
 
 La estructura parte de la [plantilla reutilizable AI-901](https://github.com/frevar1975/training-templates/tree/main/AI-901).
 
