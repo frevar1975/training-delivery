@@ -1,8 +1,8 @@
-# AI-901T00-A — Materiales de sesiones
+# AI-901 — Netxpress — Octubre 2026
 
-Borrador de materiales para ejecutar el curso **Introducción a la IA en Azure**. Contenido basado en la plantilla reutilizable del curso y organizado para impartirse en varias sesiones.
+Materiales de delivery para el curso **AI-901T00-A: Introducción a la IA en Azure**, edición de **Netxpress**.
 
-## Secuencia didáctica
+## Secuencia de sesiones
 
 1. Fundamentos, cargas de trabajo, IA responsable y primera prueba generativa.
 2. Microsoft Foundry, modelos, instrucciones, aplicaciones generativas y agentes.
@@ -11,6 +11,8 @@ Borrador de materiales para ejecutar el curso **Introducción a la IA en Azure**
 ## Materiales
 
 - [Sesión 1 — Fundamentos y primera demo](clase-01-fundamentos.md)
+
+La guía sigue la plantilla reutilizable del curso en [training-templates/AI-901](https://github.com/frevar1975/training-templates/tree/main/AI-901).
 
 ## Referencias oficiales
 
