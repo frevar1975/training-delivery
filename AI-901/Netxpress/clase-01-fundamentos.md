@@ -113,6 +113,11 @@ Observar una interacción con un modelo generativo y revisar la calidad de la re
 - Usar ejemplos sintéticos; no mostrar claves, datos personales ni información de clientes.
 - Probar el entorno previamente. Si no hay acceso, recorrer capturas o la demo local preparada.
 
+### Demo incluida en este delivery
+
+- [Instrucciones para preparar y ejecutar el agente](demo-nuevo-agente/ai-900-demo/README.md)
+- La aplicación necesita un endpoint de Microsoft Foundry, un agente accesible y autenticación con Azure CLI.
+
 ### Pasos
 
 1. Presentar un reclamo sintético: “Me cobraron dos veces el plan de internet y necesito que revisen el débito de octubre”.
