@@ -33,7 +33,7 @@ Aplicación en Python con una página web local para probar dos capacidades de A
    Set-Location .\training-delivery\AI-901\Netxpress\demo-language-detection-python
    ```
 
-   Para Education IT, la carpeta es `AI-901\EducationIT-octubre-2026\demo-language-detection-python`. Si el repositorio ya está clonado, entra en él y ejecuta `git pull`.
+   Si el repositorio ya está clonado, entra en él y ejecuta `git pull`.
 
 5. Crea el entorno virtual e instala dependencias:
 
