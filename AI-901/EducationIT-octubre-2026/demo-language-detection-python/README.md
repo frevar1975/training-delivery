@@ -30,7 +30,7 @@ Aplicación en Python con una página web local para probar dos capacidades de A
    New-Item -ItemType Directory -Force C:\clases
    Set-Location C:\clases
    git clone https://github.com/frevar1975/training-delivery.git
-   Set-Location .\training-delivery\AI-901\Netxpress\demo-language-detection-python
+   Set-Location .\training-delivery\AI-901\EducationIT-octubre-2026\demo-language-detection-python
    ```
 
    Si el repositorio ya está clonado, entra en él y ejecuta `git pull`.
