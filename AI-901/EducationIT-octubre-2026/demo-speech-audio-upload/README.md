@@ -16,7 +16,7 @@ La aplicación permite cargar un audio, normalizarlo con FFmpeg y transcribirlo 
 Set-Location C:\clases
 # Si training-delivery ya está clonado, omite el siguiente comando.
 git clone https://github.com/frevar1975/training-delivery.git
-Set-Location .\training-delivery\AI-901\\EducationIT-octubre-2026\\demo-speech-audio-upload
+Set-Location .\training-delivery\AI-901\EducationIT-octubre-2026\demo-speech-audio-upload
 py -m venv .venv
 .\.venv\Scripts\Activate.ps1
 py -m pip install -r requirements.txt
