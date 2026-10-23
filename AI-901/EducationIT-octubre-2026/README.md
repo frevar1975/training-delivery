@@ -18,4 +18,8 @@ Delivery del curso **AI-901T00: Introducción a la IA en Azure**.
 5. 29-oct-2026 — Azure AI / Foundry
 6. 03-nov-2026 — Integración, repaso y evaluación
 
+## Materiales
+
+- [Demo — Transcripción de audio con Azure Speech](demo-speech-audio-upload/README.md)
+
 La estructura se basa en la plantilla reutilizable de `frevar1975/training-templates/AI-901`.
