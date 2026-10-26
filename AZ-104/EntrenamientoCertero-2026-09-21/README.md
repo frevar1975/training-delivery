@@ -6,5 +6,7 @@ Ejecución del curso AZ-104 para Entrenamiento Certero, septiembre–octubre de 
 
 - [Módulo 8 — Administración de máquinas virtuales](module-08-virtual-machines/README.md).
 - [Demo participativa de escalado de una web con VMSS y azd](module-08-virtual-machines/demos/demo-01-vmss-autoscale-web/README.md).
+- [Módulo 9 — Opciones de proceso PaaS](module-09-paas-compute/README.md).
+- [Módulo 10 — Protección de datos con Azure Backup y Site Recovery](module-10-data-protection/README.md).
 
 Este contenido complementa el material oficial. Los recursos Azure se crean para el ensayo y la demostración y deben eliminarse cuando termine su uso.
