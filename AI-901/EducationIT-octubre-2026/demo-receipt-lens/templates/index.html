@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Receipt Lens | OCR + extracción</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="top"><div class="brand"><span class="mark">RL</span><span>LABORATORIO <b>AI VISION</b></span></div><span class="badge">DEMO · AZURE COMPUTER VISION</span></header>
+  <main>
+    <section class="hero"><div class="eyebrow">INFORMACIÓN NO ESTRUCTURADA → DATOS ÚTILES</div><h1>De una imagen a<br><em>información accionable.</em></h1><p>Sube un recibo o una imagen con texto. Observa primero lo que lee el OCR y luego cómo esos datos se organizan en campos.</p></section>
+    {% if not configured %}<div class="notice">Falta configurar Azure. Completa <code>.env</code> con el endpoint y la clave de tu recurso <code>rsv-vision</code>.</div>{% endif %}
+    <section class="workspace">
+      <div class="panel upload-panel"><div class="panel-head"><span class="step">01</span><div><h2>Entrada</h2><small>Imagen fuente</small></div></div>
+        <label class="drop" id="drop"><input type="file" id="file" accept="image/png,image/jpeg,image/webp,image/bmp"><span class="upload-icon">↑</span><strong>Arrastra una imagen aquí</strong><span>o <u>selecciona un archivo</u></span><small>JPG, PNG, WEBP o BMP · hasta 10 MB</small></label>
+        <div id="chosen" class="chosen hidden"></div>
+        <div class="mode"><label for="mode">Tipo de análisis</label><select id="mode"><option value="receipt">Recibo · OCR + campos</option><option value="ocr">Imagen general · solo OCR</option></select></div>
+        <button id="analyze" class="button" disabled>Analizar imagen <span>→</span></button>
+        <div class="secure"><span>●</span> La imagen se procesa con tu recurso de Azure configurado localmente.</div>
+      </div>
+      <div class="panel result-panel"><div class="panel-head"><span class="step">02</span><div><h2>Resultado</h2><small id="status">Esperando imagen</small></div><span class="live"><i></i> LISTO</span></div>
+        <div id="empty" class="empty"><div class="empty-art"><span>IMG</span><b>→</b><span>TXT</span></div><strong>El análisis aparecerá aquí</strong><p>Carga una imagen y ejecuta el análisis para ver el texto detectado y los campos extraídos.</p></div>
+        <div id="output" class="hidden"><div class="tabs"><button class="tab active" data-tab="fields">Campos extraídos</button><button class="tab" data-tab="ocr">Texto OCR</button></div><div id="fields" class="field-grid"></div><pre id="ocr" class="ocr hidden"></pre><details class="image-details"><summary>Ver imagen analizada</summary><img id="preview" alt="Imagen analizada"></details></div>
+        <div id="error" class="error hidden"></div>
+      </div>
+    </section>
+    <section class="explain"><div><span class="step">IDEA CLAVE</span><h2>Leer no es lo mismo<br>que comprender.</h2></div><div class="explain-cards"><article><b>01 / OCR</b><h3>Detecta texto</h3><p>Convierte píxeles en palabras y números. Aquí usamos Azure Computer Vision Read.</p></article><article><b>02 / EXTRACCIÓN</b><h3>Asigna significado</h3><p>Relaciona el texto con campos como comercio, fecha o total. En este demo es una etapa didáctica basada en patrones.</p></article></div></section>
+    <footer>DEMO EDUCATIVO · Revisa los campos antes de usarlos en procesos reales.</footer>
+  </main>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body></html>
