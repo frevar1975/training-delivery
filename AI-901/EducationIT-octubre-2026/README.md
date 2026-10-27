@@ -24,3 +24,4 @@ Delivery del curso **AI-901T00: Introducción a la IA en Azure**.
 - [Demo — Agente de voz con Azure Speech MCP](demo-speech-mcp-agent/README.md)
 
 La estructura se basa en la plantilla reutilizable de `frevar1975/training-templates/AI-901`.
+- [Demo — Análisis de imágenes con Azure AI Vision](demo-vision-image-analysis/README.md)
