@@ -21,3 +21,4 @@ La estructura parte de la [plantilla reutilizable AI-901](https://github.com/fre
 
 - [Curso AI-901T00-A — Introduction to AI in Azure](https://learn.microsoft.com/en-us/training/courses/ai-901t00)
 - [Guía de estudio del examen AI-901](https://learn.microsoft.com/en-us/credentials/certifications/resources/study-guides/ai-901)
+- [Demo — Análisis de imágenes con Azure AI Vision](demo-vision-image-analysis/README.md)
