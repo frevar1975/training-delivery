@@ -43,7 +43,9 @@ InsightsMetrics
 3. **DCR sin tipo:** la primera actualización sin `--kind Linux` fue rechazada porque el tipo de la regla es inmutable. La plantilla pasa `--kind Linux` al crear la DCR desde el primer intento.
 4. **Contador con escapes duplicados:** la primera versión del JSON llevaba cuatro barras invertidas por separador. La DCR esperaba `\\VmInsights\\DetailedMetrics` en el JSON (dos caracteres de barra por separador, que representan una barra real). Se corrigió y se comprobó el valor con `az monitor data-collection rule show`.
 5. **AMA no aplicó inmediatamente la configuración corregida:** reiniciar el servicio no bastó para que la regla nueva apareciera en el caché local. Se recreó únicamente la asociación de `dcr-demo-vminsights`, se esperó la propagación y luego aparecieron las filas KQL. La guía indica esperar y tratar la asociación como paso de resincronización si una DCR actualizada sigue sin reflejarse.
-6. **Rutas de métricas distintas:** el portal mostró también la experiencia OpenTelemetry con destino a un Azure Monitor workspace. Esa ruta se consulta con PromQL; no valida los datos clásicos de Log Analytics. Para este demo, la prueba de éxito es `InsightsMetrics` en `law-demo-loganalytics`.
+6. **Salida de Run Command poco visible en PowerShell:** se guardó la respuesta de `az vm run-command invoke` en `$resultado` y se imprimió esa variable para poder revisar el JSON del agente.
+7. **Consulta JMESPath con `properties.*`:** devolvió `null` porque la salida de `az monitor data-collection rule show` ya expone `dataSources`, `destinations` y `dataFlows` en el nivel superior. Se consultó `dataSources.performanceCounters[0].counterSpecifiers` sin `properties.`.
+8. **Rutas de métricas distintas:** el portal mostró también la experiencia OpenTelemetry con destino a un Azure Monitor workspace. Esa ruta se consulta con PromQL; no valida los datos clásicos de Log Analytics. Para este demo, la prueba de éxito es `InsightsMetrics` en `law-demo-loganalytics`.
 
 ## Guion de cierre
 
