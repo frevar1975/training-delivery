@@ -197,6 +197,7 @@ def index():
         return render_template(
             "index.html", languages=LANGUAGES, transcript=transcript, filename=filename,
             language=language, case=case, agent_text=agent_text, tool_events=tool_events,
+            sample_transcript=SAMPLE_TRANSCRIPT,
         )
     except Exception as exc:
         app.logger.exception("Atención agent demo failed")
