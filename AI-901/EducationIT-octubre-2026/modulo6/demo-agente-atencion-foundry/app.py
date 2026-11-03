@@ -62,7 +62,12 @@ def transcribe_audio(audio_path: str, language: str) -> str:
 
     def on_canceled(event):
         details = event.result.cancellation_details
-        errors.append(details.error_details if details else "Reconocimiento cancelado.")
+        errors.append(
+            details.error_details
+            or f"Reconocimiento cancelado. Motivo: {details.reason}; código: {details.error_code}"
+            if details
+            else f"Reconocimiento cancelado. Estado: {event.result.reason}"
+        )
         finished.set()
 
     recognizer.recognized.connect(on_recognized)
@@ -174,9 +179,11 @@ def index():
         language = "es-BO"
     transcript = request.form.get("transcript", "").strip()
     audio = request.files.get("audio")
+    audio_attempted = bool(audio and audio.filename)
     filename = ""
     try:
-        if audio and audio.filename:
+        if audio_attempted:
+            transcript = ""
             filename = secure_filename(audio.filename)
             suffix = Path(filename).suffix.lower().lstrip(".")
             if suffix not in ALLOWED_EXTENSIONS:
@@ -197,14 +204,14 @@ def index():
         return render_template(
             "index.html", languages=LANGUAGES, transcript=transcript, filename=filename,
             language=language, case=case, agent_text=agent_text, tool_events=tool_events,
-            sample_transcript=SAMPLE_TRANSCRIPT,
+            sample_transcript=SAMPLE_TRANSCRIPT, audio_attempted=audio_attempted,
         )
     except Exception as exc:
         app.logger.exception("Atención agent demo failed")
         return render_template(
             "index.html", languages=LANGUAGES, transcript=transcript, filename=filename,
             language=language, error=str(exc), sample_transcript=SAMPLE_TRANSCRIPT,
-            case=None, agent_text="", tool_events=[],
+            case=None, agent_text="", tool_events=[], audio_attempted=audio_attempted,
         ), 400
 
 
