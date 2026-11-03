@@ -20,10 +20,10 @@ Delivery del curso **AI-901T00: Introducción a la IA en Azure**.
 
 ## Materiales
 
-- [Demo — DocuLens: extracción de información individual y por lotes](demo-content-understanding-lotes/README.md)
-
-- [Demo — Transcripción de audio con Azure Speech](demo-speech-audio-upload/README.md)
+- [Demo — DocuLens: extracción de información individual y por lotes](modulo6/demo-content-understanding-lotes/README.md)
+- [Demo — Transcripción de audio con Azure Speech](modulo6/demo-speech-audio-upload/README.md)
 - [Demo — Agente de voz con Azure Speech MCP](demo-speech-mcp-agent/README.md)
+- [Demo — Análisis de imágenes con Azure AI Vision](demo-vision-image-analysis/README.md)
 
 La estructura se basa en la plantilla reutilizable de `frevar1975/training-templates/AI-901`.
 - [Demo — Análisis de imágenes con Azure AI Vision](demo-vision-image-analysis/README.md)
