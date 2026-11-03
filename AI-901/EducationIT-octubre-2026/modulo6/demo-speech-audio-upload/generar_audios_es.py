@@ -52,8 +52,13 @@ for sample in samples:
     )
     result = synthesizer.speak_text_async(sample["text"]).get()
     if result.reason != speechsdk.ResultReason.SynthesizingAudioCompleted:
-        details = speechsdk.SpeechSynthesisCancellationDetails.from_result(result)
-        error = details.error_details or str(details.reason)
+        # En Python, el detalle de cancelación se obtiene desde el resultado.
+        details = result.cancellation_details
+        error = (
+            details.error_details or str(details.reason)
+            if details is not None
+            else f"motivo de resultado: {result.reason}"
+        )
         if output_path.exists():
             output_path.unlink()
         raise SystemExit(f"No se pudo generar {output_path.name}: {error}")
