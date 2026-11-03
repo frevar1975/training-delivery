@@ -5,7 +5,7 @@ El demo convierte una llamada o transcripción en un caso de atención. Muestra 
 1. **Foundry Portal:** crear un agente Prompt y probarlo en el playground.
 2. **Python:** una aplicación Flask transcribe audio con Azure Speech y ejecuta un agente conectado a un modelo del proyecto Foundry. El agente puede invocar la función local `consultar_registro`, que busca citas o pedidos en datos ficticios.
 
-**Flujo:** audio o texto → transcripción → agente → herramienta Python → caso estructurado y respuesta sugerida.
+**Flujo:** audio o texto → transcripción → agente → herramienta Python → caso estructurado y respuesta sugerida → simulación de correo. El botón de correo solo muestra una vista previa y confirma una simulación; no envía mensajes reales.
 
 ## Requisitos en Azure
 
@@ -92,6 +92,7 @@ El agente debe consultar el pedido de ejemplo y proponer una respuesta basada en
 
 - Playground de Foundry: agente, modelo, instrucciones y respuestas.
 - Aplicación: diferencia entre un chat y un agente que decide llamar una herramienta.
+- Botón de correo: vista previa del mensaje sugerido y confirmación de envío simulado, sin conexión SMTP ni envío real.
 - Código Python: función local, parámetros que el modelo suministra, resultado que vuelve al modelo y respuesta final.
 - Límite de seguridad: los registros son solo datos ficticios; la respuesta sugerida requiere revisión humana.
 
