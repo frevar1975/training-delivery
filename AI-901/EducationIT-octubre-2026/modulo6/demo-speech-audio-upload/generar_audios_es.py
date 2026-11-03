@@ -59,10 +59,9 @@ for sample in samples:
             if details is not None
             else f"motivo de resultado: {result.reason}"
         )
-        if output_path.exists():
-            output_path.unlink()
+        # No borrar aquí: el SDK puede mantener el archivo abierto hasta cerrar el proceso.
         raise SystemExit(f"No se pudo generar {output_path.name}: {error}")
-    Path(sample["textfile"]).write_text(sample["text"] + "\n", encoding="utf-8")
+    Path(sample["textfile"]).write_text(sample["text"] + "\\n", encoding="utf-8")
     print(f"Listo: {output_path.name} ({sample['voice']})")
 
 print("Carga los WAV en el demo y selecciona Español (Bolivia).")
