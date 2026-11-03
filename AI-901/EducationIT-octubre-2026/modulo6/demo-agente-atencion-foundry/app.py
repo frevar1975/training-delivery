@@ -20,6 +20,10 @@ app.secret_key = os.getenv("FLASK_SECRET_KEY", "demo-local")
 app.config["MAX_CONTENT_LENGTH"] = 25 * 1024 * 1024
 
 ALLOWED_EXTENSIONS = {"wav", "mp3", "m4a", "mp4", "ogg", "webm", "flac"}
+SAMPLE_TRANSCRIPT = (
+    "Hola, señora Camila. Le llamo de la Clínica San Gabriel para confirmar "
+    "su cita de mañana a las diez y media. Por favor, llegue quince minutos antes."
+)
 LANGUAGES = {
     "es-BO": "Español (Bolivia)",
     "es-ES": "Español (España)",
@@ -157,16 +161,13 @@ def run_agent(transcript: str):
 
 @app.errorhandler(413)
 def too_large(_error):
-    return render_template("index.html", error="El archivo supera el límite de 25 MB.", languages=LANGUAGES), 413
+    return render_template("index.html", error="El archivo supera el límite de 25 MB.", languages=LANGUAGES, sample_transcript=SAMPLE_TRANSCRIPT), 413
 
 
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "GET":
-        return render_template("index.html", languages=LANGUAGES, sample_transcript=(
-            "Hola, señora Camila. Le llamo de la Clínica San Gabriel para confirmar "
-            "su cita de mañana a las diez y media. Por favor, llegue quince minutos antes."
-        ))
+        return render_template("index.html", languages=LANGUAGES, sample_transcript=SAMPLE_TRANSCRIPT)
 
     language = request.form.get("language", "es-BO")
     if language not in LANGUAGES:
@@ -182,7 +183,7 @@ def index():
                 raise RuntimeError("Formato no admitido. Usa WAV, MP3, M4A, MP4, OGG, WEBM o FLAC.")
             if not os.getenv("SPEECH_KEY") or not os.getenv("SPEECH_REGION"):
                 raise RuntimeError("Para transcribir audio, configura SPEECH_KEY y SPEECH_REGION.")
-            with tempfile.TemporaryDirectory(prefix="agente-ai901-") as workdir:
+            with tempfile.TemporaryDirectory(prefix="agente-ai901-", ignore_cleanup_errors=True) as workdir:
                 original = os.path.join(workdir, filename or "audio." + suffix)
                 wav_path = os.path.join(workdir, "audio-normalizado.wav")
                 audio.save(original)
@@ -201,7 +202,8 @@ def index():
         app.logger.exception("Atención agent demo failed")
         return render_template(
             "index.html", languages=LANGUAGES, transcript=transcript, filename=filename,
-            language=language, error=str(exc),
+            language=language, error=str(exc), sample_transcript=SAMPLE_TRANSCRIPT,
+            case=None, agent_text="", tool_events=[],
         ), 400
 
 
