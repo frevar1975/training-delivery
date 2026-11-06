@@ -1,9 +1,10 @@
-pregunta,respuesta_del_equipo
-¿Qué problema se quiere resolver?,
-¿A quién afecta?,
-¿Qué tarea podría apoyar la IA?,
-¿Qué datos necesitaría?,
-¿Qué riesgo debe controlarse?,
-¿Qué decisión debe seguir siendo humana?,
-¿Qué indicador mediríamos en un piloto?,
-¿Cuál sería una señal para detener o revisar el piloto?,
+﻿pregunta,respuesta_del_equipo
+¿Qué problema se quiere resolver?,"Los reclamos se resumen y derivan manualmente, lo que puede generar demoras y respuestas inconsistentes."
+¿A quién afecta?,Clientes que esperan respuesta y empleados que clasifican y redactan contestaciones.
+¿Qué tarea podría apoyar la IA?,"Resumir el reclamo, sugerir una categoría y preparar un borrador de respuesta."
+¿Qué datos necesitaría?,"Texto del reclamo, categorías de atención, reglas de prioridad y contexto confirmado del caso."
+¿Qué riesgos hay que controlar?,"Prioridad incorrecta, promesas no autorizadas, datos personales expuestos y respuestas desiguales."
+¿Qué decisión debe seguir siendo humana?,Confirmar prioridades sensibles y aprobar cada respuesta antes de enviarla.
+¿Qué indicador mediríamos en un piloto?,Tiempo promedio para preparar borradores y porcentaje de borradores que requieren corrección.
+¿Qué resultado justificaría ampliar el piloto?,Reducción del tiempo sin aumentar errores ni correcciones críticas.
+¿Qué condición motivaría detenerlo o revisarlo?,"Aumento de afirmaciones no sustentadas, errores de prioridad o exposición de datos."

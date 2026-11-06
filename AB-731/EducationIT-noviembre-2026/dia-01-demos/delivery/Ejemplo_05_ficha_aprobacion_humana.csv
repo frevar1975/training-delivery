@@ -1,6 +1,6 @@
-criterio,decision,observaciones
-¿El resumen representa correctamente el reclamo?,,
-¿La prioridad está justificada con los datos disponibles?,,
-¿La respuesta promete algo no confirmado?,,
-¿Qué dato debe verificar el empleado?,,
-Decisión: aprobar / corregir / rechazar / escalar,,
+﻿criterio,decision,observaciones
+¿El resumen representa correctamente el caso?,"Sí, si conserva que el cliente menciona dependencia de un equipo médico y no agrega hechos.",Verificar protocolo y estado en sistema.
+¿La prioridad se justifica con los datos disponibles?,"Sí, sugerir atención prioritaria por la condición comunicada.",No es diagnóstico ni validación técnica.
+¿La respuesta contiene promesas no confirmadas?,"No debe prometer fecha, visita ni restablecimiento.",Corregir cualquier promesa.
+¿Qué dato debe verificar el empleado?,"Estado del reclamo, protocolo aplicable y canal de escalamiento.",Usar sistema autorizado.
+Decisión: aprobar / corregir / rechazar / escalar,Escalar y mantener como borrador.,Enviar solo después de verificación y aprobación.
