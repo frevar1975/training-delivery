@@ -8,6 +8,58 @@
 
 Esta guía de ejecución toma como base la [plantilla reutilizable de training-templates](https://github.com/frevar1975/training-templates/blob/main/SC-200/demo-github-sentinel/README.md).
 
+## Comandos usados para crear el entorno desde cero
+
+Estos comandos se ejecutan en **Git Bash (UCRT64)** después de `az login`. Seleccionan la suscripción de Visual Studio, crean el grupo y el workspace, registran el proveedor y habilitan Microsoft Sentinel. La identidad de Azure CLI necesita permisos para crear recursos y registrar proveedores en la suscripción.
+
+~~~bash
+# 1. Seleccionar la suscripción correcta
+SUBSCRIPTION_ID="430c139d-1e7d-4f38-81cb-a03710c5a3d3"
+az account set --subscription "$SUBSCRIPTION_ID"
+az account show --query "{subscription:name, id:id, tenant:tenantId}" -o table
+
+# 2. Crear el grupo de recursos y el workspace en East US
+az group create --name rg-sc200 --location eastus -o table
+
+az monitor log-analytics workspace create \
+  --resource-group rg-sc200 \
+  --workspace-name law-sc200-repo-demo \
+  --location eastus \
+  -o table
+
+# 3. Confirmar que el workspace terminó de aprovisionarse
+az monitor log-analytics workspace show \
+  --resource-group rg-sc200 \
+  --workspace-name law-sc200-repo-demo \
+  --query "{name:name, location:location, state:provisioningState}" \
+  -o table
+
+# Si el nombre no aparece o se quiere revisar qué workspaces hay:
+az monitor log-analytics workspace list \
+  --query "[].{name:name, resourceGroup:resourceGroup, location:location, state:provisioningState}" \
+  -o table
+
+# 4. Registrar Microsoft Sentinel en la suscripción
+az provider register --namespace Microsoft.SecurityInsights
+
+# Consultar el estado; esperar hasta que muestre Registered
+az provider show --namespace Microsoft.SecurityInsights --query registrationState -o tsv
+
+# 5. Habilitar Microsoft Sentinel para el workspace
+az rest --method put \
+  --url "https://management.azure.com/subscriptions/${SUBSCRIPTION_ID}/resourceGroups/rg-sc200/providers/Microsoft.OperationalInsights/workspaces/law-sc200-repo-demo/providers/Microsoft.SecurityInsights/onboardingStates/default?api-version=2025-09-01" \
+  --body '{"properties":{"customerManagedKey":false}}'
+
+# 6. Verificar que existe el estado de onboarding
+az rest --method get \
+  --url "https://management.azure.com/subscriptions/${SUBSCRIPTION_ID}/resourceGroups/rg-sc200/providers/Microsoft.OperationalInsights/workspaces/law-sc200-repo-demo/providers/Microsoft.SecurityInsights/onboardingStates/default?api-version=2025-09-01" \
+  -o jsonc
+~~~
+
+El comando `az provider register` puede quedar en estado `Registering` durante un rato. Repite `az provider show` hasta ver `Registered` antes de ejecutar el `az rest --method put`; si se ejecuta antes, Azure devuelve que la suscripción no está registrada.
+
+Para este demo, después del onboarding también conectamos el repositorio desde el portal de Sentinel: **Content management → Repositories → Add new**. Allí se autoriza GitHub y se seleccionan el repositorio y la rama. Sentinel genera el workflow de GitHub Actions; el flujo no se configura solo con `az login` ni con el onboarding REST.
+
 ## Objetivo de la demostración
 
 Crear una consulta guardada en el repositorio, desplegarla con GitHub Actions y comprobarla en Microsoft Sentinel.
