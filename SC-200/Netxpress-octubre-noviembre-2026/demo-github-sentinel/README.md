@@ -140,6 +140,21 @@ El sufijo `3` hace único el nombre interno y el archivo. Si ya se usó en otra 
 
 El workflow se inicia con cambios en la rama `main`. Si no aparece un run, revisar el commit y confirmar que Actions no esté deshabilitado.
 
+
+
+#### Verificación opcional por Azure CLI
+
+Después del run exitoso, confirma que el recurso se guardó en el workspace:
+
+~~~bash
+az rest --method get \\
+  --url "https://management.azure.com/subscriptions/${SUBSCRIPTION_ID}/resourceGroups/rg-sc200/providers/Microsoft.OperationalInsights/workspaces/law-sc200-repo-demo/savedSearches/sc200-demo-repo-query-3?api-version=2020-03-01-preview" \\
+  --query "{name:name, displayName:properties.displayName, category:properties.category, query:properties.query}" \\
+  -o yaml
+~~~
+
+Debe mostrar el nombre interno `sc200-demo-repo-query-3`, el título **SC-200 Demo 3 - Consulta creada en GitHub** y la KQL. Este GET es opcional; en clase también puedes demostrarlo desde la lista **Queries/Consultas** de Sentinel.
+
 ### 3. Mostrar la consulta en Sentinel
 
 1. Volver al workspace `law-sc200-repo-demo`.
