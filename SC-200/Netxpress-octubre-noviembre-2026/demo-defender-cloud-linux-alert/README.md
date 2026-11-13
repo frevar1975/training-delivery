@@ -1,33 +1,54 @@
-# Runbook: demostración de alerta de Defender for Cloud en Linux
+# Runbook por fases: Syslog primero, alerta de endpoint después
 
-## Resultado esperado
+## Propósito de la demostración
 
-Una alerta de detección de prueba asociada a la VM Linux aparece en Microsoft Defender for Cloud. Si el conector correspondiente está activo y apunta al workspace correcto, también se puede consultar en Microsoft Sentinel.
+La sesión tiene dos momentos separados. **Fase A** muestra recopilación Syslog con Defender for Servers desactivado. **Fase B** habilita Defender for Servers, espera el sensor Linux y prueba una detección. No confundir un evento Syslog o una alerta de ejemplo con una detección real de la VM.
 
-## Verificaciones previas
+## Fase A — Estado inicial, sin activar Servers
 
-- Usa una VM de laboratorio dedicada, nunca una máquina de producción.
-- Confirma que Defender for Servers está habilitado y que revisaste el precio vigente y el ámbito de cobertura de la suscripción.
-- Comprueba que Defender for Endpoint esté instalado en Linux y que la protección en tiempo real esté activa.
-- Si el destino es Sentinel, confirma el workspace y el estado conectado del conector de Microsoft Defender for Cloud.
-- AMA y la DCR de Syslog ayudan a recopilar registros, pero no reemplazan al sensor de Defender for Endpoint para esta detección.
+Antes de modificar planes:
 
-## Ejecución
-
-1. Habilita **Servers** desde **Defender for Cloud → Environment settings → suscripción → Defender plans**, solo tras aceptar el costo que muestra tu portal.
-2. Abre **Monitoring coverage → Settings**. En **Endpoint protections**, usa **Fix** y habilita el componente faltante bajo **Linux machines**.
-3. Espera el aprovisionamiento. Confirma en las extensiones de la VM que `MDE.Linux` tenga estado `Succeeded`.
-4. En la VM, ejecuta:
+1. En Defender for Cloud → **Environment settings → suscripción → Defender plans**, confirma que **Servers** esté **Off**. Registra el precio y la cantidad de recursos que el portal muestra para tomar una decisión antes de activarlo.
+2. Confirma que AMA esté instalado y que una DCR Syslog esté asociada a la VM de laboratorio.
+3. Desde Run Command o una sesión autorizada, manda un evento inocuo:
    ```bash
-   sudo mdatp health --field real_time_protection_enabled
+   logger -p local4.warning -t SC200-LINUX-DEMO 'Prueba de Syslog fase A'
    ```
-   Continúa solo si devuelve `true`.
-5. Para una detección inocua, descarga EICAR únicamente en la VM desechable:
+4. En el workspace de Sentinel, demuestra que el mensaje llegó:
+   ```kusto
+   Syslog
+   | where TimeGenerated > ago(1h)
+   | where ProcessName == "SC200-LINUX-DEMO"
+   | project TimeGenerated, Computer, Facility, SeverityLevel, SyslogMessage
+   | order by TimeGenerated desc
+   ```
+5. Muestra que la recopilación funciona, pero aún no hay sensor MDE:
+   ```powershell
+   az vm extension list --resource-group "<grupo>" --vm-name "<vm>" --query "[].{Nombre:name,Estado:provisioningState}" -o table
+   ```
+   Si `mdatp` responde `command not found`, es coherente con esta fase. No descargues EICAR.
+
+## Fase B — Activar e incorporar el sensor
+
+1. Vuelve a **Environment settings → suscripción → Defender plans**. Revisa el precio, la prueba disponible y cuántos servidores cubrirá el ámbito. Habilita **Servers** únicamente si aceptas esas condiciones.
+2. En **Settings and monitoring**, confirma **Endpoint protection: On**; pulsa **Continue** y después **Save**.
+3. Mantén la VM encendida y espera a que se incorpore el sensor. Microsoft indica que normalmente puede tomar hasta una hora y, en la primera integración Linux de la suscripción, hasta 12 horas.
+4. Repite la consulta de extensiones y espera a ver `MDE.Linux` con estado `Succeeded`.
+5. Verifica protección en tiempo real:
+   ```powershell
+   az vm run-command invoke --resource-group "<grupo>" --name "<vm>" --command-id RunShellScript --scripts "sudo mdatp health --field real_time_protection_enabled" --query "value[0].message" -o tsv
+   ```
+   Sigue solo si el resultado es `true`. Si aparece `mdatp: command not found`, espera y revisa el estado detallado de la extensión y los requisitos de despliegue.
+
+## Fase C — Prueba de detección
+
+1. En la VM desechable, descarga EICAR:
    ```bash
    curl -O https://secure.eicar.org/eicar.com.txt
    ```
-6. Espera unos minutos. En **Defender for Cloud → Security alerts**, filtra por el recurso de prueba y confirma que la alerta corresponda a esa VM.
-7. En Sentinel, abre **Logs** y consulta:
+   EICAR es un archivo inocuo de prueba antimalware; no lo uses en producción.
+2. En Defender for Cloud → **Security alerts**, busca la alerta y valida que la VM figure como recurso afectado.
+3. En Sentinel → **Logs**, ejecuta:
    ```kusto
    SecurityAlert
    | where TimeGenerated > ago(1d)
@@ -37,18 +58,20 @@ Una alerta de detección de prueba asociada a la VM Linux aparece en Microsoft D
    | project TimeGenerated, AlertName, AlertSeverity, ProductName, CompromisedEntity
    | order by TimeGenerated desc
    ```
-8. Si no aparece en Sentinel, revisa el estado del conector, el workspace y los permisos de la suscripción. La presencia de alertas de ejemplo `Sample-VM` no confirma que la VM real esté generando alertas ni que la conexión en vivo funcione.
-9. Al acabar, apaga el plan si no necesitas protección continua. Verifica la cobertura restante y revisa los costos de Azure.
+4. Si no llega a Sentinel, verifica conector, workspace y permisos. Una alerta que aparece en Defender for Cloud y una alerta que llega a Sentinel son dos comprobaciones separadas.
 
-## Registro de evidencias
+## Fase D — Cierre
 
-- Captura del precio y alcance antes de habilitar Servers.
-- Estado de la extensión y protección en tiempo real.
-- Alerta de Defender for Cloud con la VM de laboratorio como recurso afectado.
-- Resultado de la consulta en Sentinel y estado del conector.
+1. Si Servers no se necesita de forma continua, deshabilítalo en el ámbito configurado y guarda.
+2. Confirma que no quede el plan activo a nivel de recurso; revisa los medidores de Defender for Servers en Cost Management.
+3. No elimines el workspace compartido. Detén o elimina la VM solo si no se reutiliza en otras prácticas.
+
+## Qué explicar
+
+“Primero validamos la tubería de Syslog: AMA y DCR entregan registros a Sentinel, sin generar una detección de endpoint. Después activamos Defender for Servers, incorporamos el sensor MDE de Linux y comprobamos su salud. EICAR valida la detección; Defender for Cloud muestra la alerta del servidor y Sentinel puede centralizarla si el conector funciona. Revisamos precio y cobertura antes de activar.”
 
 ## Referencias
 
+- [Integración MDE y tiempos de incorporación](https://learn.microsoft.com/azure/defender-for-cloud/enable-defender-for-endpoint)
 - [Validación de alertas](https://learn.microsoft.com/azure/defender-for-cloud/alert-validation)
-- [Integración de Defender for Endpoint](https://learn.microsoft.com/azure/defender-for-cloud/enable-defender-for-endpoint)
-- [Habilitar Defender for Servers](https://learn.microsoft.com/azure/defender-for-cloud/tutorial-enable-servers-plan)
+- [Deshabilitar planes y revisar cargos](https://learn.microsoft.com/azure/defender-for-cloud/disable-plans)
